@@ -31,6 +31,7 @@ public class Movement : MonoBehaviour
         //Vector3 Movement = new Vector3 (Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
         //player.transform.position += Movement * speed * Time.deltaTime;
         //float tiltAroundZ = Input.GetAxis("Horizontal") * tiltAngle;  
+        Physics.gravity = new Vector3(0, -19.0F, 0);
         someVec = rBody.transform.up + rBody.transform.forward;
         //Quaternion target = Quaternion.Euler(0, tiltAroundZ, 0 );
         //transform.rotation = Quaternion.Slerp(transform.rotation, target,  Time.deltaTime * smooth);
@@ -59,7 +60,10 @@ public class Movement : MonoBehaviour
             //charge jump
             if (Input.GetKey(KeyCode.Space))
             {
+                if(chargingP <= .18f)
+                {
                 chargingP += .1f * Time.deltaTime;
+                }
                 //Debug.Log("SDf");
             }
             //jump on release
