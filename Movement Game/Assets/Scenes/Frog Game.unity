@@ -10591,8 +10591,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 1258594396}
-  jumpForce: 100
-  jumpVal: 20
+  jumpForce: 50
+  jumpVal: 30
   chargingP: 0
   grounded: 0
 --- !u!54 &1258594400
