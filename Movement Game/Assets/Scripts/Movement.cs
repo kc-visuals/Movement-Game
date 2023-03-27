@@ -5,29 +5,22 @@ using UnityEngine;
 public class Movement : MonoBehaviour
 {
     public GameObject player;
-    public float speed = 2.0f;
     public float jumpForce = 100.0f;
     public float jumpVal = 10.0f;
     public float chargingP = 0.0f;
     public bool grounded = false;
-    float smooth = 1.0f;
-    float tiltAngle = 180.0f;
 
     //private bool Jump = false;
     private Rigidbody rBody;
     private Vector3 startingPosition;
     private Vector3 someVec;
-    private float time = 0.0f;
-    SkinnedMeshRenderer meshRenderer;
-    MeshCollider collider;
 
     // Start is called before the first frame update
     void Start()
     {
-        rBody = GetComponent<Rigidbody>();
-        meshRenderer = GetComponent<SkinnedMeshRenderer>();
-        collider = GetComponent<MeshCollider>();
+        rBody = player.GetComponent<Rigidbody>();
         startingPosition = this.transform.position;
+        //Physics.gravity = new Vector3(0, -9.8f, 0);
     }
 
     // Update is called once per frame
@@ -36,27 +29,27 @@ public class Movement : MonoBehaviour
         //Vector3 Movement = new Vector3 (Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
         //player.transform.position += Movement * speed * Time.deltaTime;
         //float tiltAroundZ = Input.GetAxis("Horizontal") * tiltAngle;  
-        Physics.gravity = new Vector3(0, -19.0F, 0);
         someVec = rBody.transform.up + rBody.transform.forward;
         //Quaternion target = Quaternion.Euler(0, tiltAroundZ, 0 );
         //transform.rotation = Quaternion.Slerp(transform.rotation, target,  Time.deltaTime * smooth);
 
         if (Input.GetKeyDown(KeyCode.W))
         {
+            
             if (grounded)
             {
                 rBody.AddForce(someVec.normalized * jumpVal, ForceMode.Impulse);
                 grounded = false;
-                Debug.Log("hu");
             }
         }
+
         if (Input.GetAxis("Horizontal") == 1)
         {
-            this.transform.Rotate(new Vector3(0, 0, 90) * Time.deltaTime);
+            this.transform.Rotate(new Vector3(0, 90, 0) * Time.deltaTime);
         }
         if (Input.GetAxis("Horizontal") == -1)
         {
-            this.transform.Rotate(new Vector3( 0,0, 90) * Time.deltaTime);
+            this.transform.Rotate(new Vector3(0, -90, 0) * Time.deltaTime);
         }
 
         if (grounded)
@@ -64,7 +57,7 @@ public class Movement : MonoBehaviour
             //charge jump
             if (Input.GetKey(KeyCode.Space))
             {
-                if(chargingP <= .18f)
+                if (chargingP <= .18f)
                 {
                 chargingP += .1f * Time.deltaTime;
                 }
@@ -80,15 +73,8 @@ public class Movement : MonoBehaviour
                 grounded = false;
             }
         }
-        time += Time.deltaTime;
-             if (time >= 0.5f)
-             {
-                 time = 0;
-                 UpdateCollider();
-             }
 
     }
-    
     /* void FixedUpdate()
      {
          if (Jump)
@@ -98,20 +84,11 @@ public class Movement : MonoBehaviour
              chargingP = 0;
          }
      }*/
-    void UpdateCollider() 
-     {
-        Mesh colliderMesh = new Mesh();
-        meshRenderer.BakeMesh(colliderMesh);
-        collider.sharedMesh = null;
-        collider.sharedMesh = colliderMesh;
-     }
     void OnCollisionEnter(Collision col)
     {
       //  if (col.gameObject.tag == "Default")
       //  {
             grounded = true;
-            //rBody.constraints = RigidbodyConstraints.FreezePosition;
-            //rBody.constraints = RigidbodyConstraints.FreezeRotation;
             //Debug.Log("yas");
         //}
     }
