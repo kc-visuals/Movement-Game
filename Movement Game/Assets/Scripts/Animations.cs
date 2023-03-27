@@ -27,5 +27,9 @@ public class Animations : MonoBehaviour
         {
             anim.SetBool("isLeaping",false);
         }
+        if (Input.GetKeyUp(KeyCode.Space))
+        {
+            anim.SetBool("isLeaping",true);
+        }
     }
 }
