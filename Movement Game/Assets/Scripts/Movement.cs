@@ -10,18 +10,23 @@ public class Movement : MonoBehaviour
     public float jumpVal = 10.0f;
     public float chargingP = 0.0f;
     public bool grounded = false;
-    float smooth = 5.0f;
-    float tiltAngle = 90.0f;
+    float smooth = 1.0f;
+    float tiltAngle = 180.0f;
 
     //private bool Jump = false;
     private Rigidbody rBody;
     private Vector3 startingPosition;
     private Vector3 someVec;
+    private float time = 0.0f;
+    SkinnedMeshRenderer meshRenderer;
+    MeshCollider collider;
 
     // Start is called before the first frame update
     void Start()
     {
         rBody = GetComponent<Rigidbody>();
+        meshRenderer = GetComponent<SkinnedMeshRenderer>();
+        collider = GetComponent<MeshCollider>();
         startingPosition = this.transform.position;
     }
 
@@ -42,17 +47,16 @@ public class Movement : MonoBehaviour
             {
                 rBody.AddForce(someVec.normalized * jumpVal, ForceMode.Impulse);
                 grounded = false;
+                Debug.Log("hu");
             }
         }
         if (Input.GetAxis("Horizontal") == 1)
         {
-            Quaternion target = Quaternion.Euler(0, tiltAngle, 0);
-            transform.rotation = Quaternion.Slerp(transform.rotation, target, Time.deltaTime * smooth);
+            this.transform.Rotate(new Vector3(0, 0, 90) * Time.deltaTime);
         }
         if (Input.GetAxis("Horizontal") == -1)
         {
-            Quaternion target = Quaternion.Euler(0, -tiltAngle, 0);
-            transform.rotation = Quaternion.Slerp(transform.rotation, target, Time.deltaTime * smooth);
+            this.transform.Rotate(new Vector3( 0,0, 90) * Time.deltaTime);
         }
 
         if (grounded)
@@ -76,8 +80,15 @@ public class Movement : MonoBehaviour
                 grounded = false;
             }
         }
+        time += Time.deltaTime;
+             if (time >= 0.5f)
+             {
+                 time = 0;
+                 UpdateCollider();
+             }
 
     }
+    
     /* void FixedUpdate()
      {
          if (Jump)
@@ -87,6 +98,13 @@ public class Movement : MonoBehaviour
              chargingP = 0;
          }
      }*/
+    void UpdateCollider() 
+     {
+        Mesh colliderMesh = new Mesh();
+        meshRenderer.BakeMesh(colliderMesh);
+        collider.sharedMesh = null;
+        collider.sharedMesh = colliderMesh;
+     }
     void OnCollisionEnter(Collision col)
     {
       //  if (col.gameObject.tag == "Default")
