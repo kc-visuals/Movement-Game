@@ -67,7 +67,7 @@ public class Movement : MonoBehaviour
             //charge jump
             if (Input.GetKey(KeyCode.Space))
             {
-                if (chargingP <= .18f)
+                if (chargingP <= .23f)
                 {
                 chargingP += .1f * Time.deltaTime;
                 }
